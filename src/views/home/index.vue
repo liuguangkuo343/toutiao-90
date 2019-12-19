@@ -2,8 +2,8 @@
   <!-- 整体的容器 -->
   <el-container>
     <!-- 左右布局 -->
-    <el-aside>
-      <el-row></el-row>
+    <el-aside style="height:100vh;background-color: #323745; width:230px">
+        <leftaside></leftaside>
     </el-aside>
     <!-- 上下布局 -->
     <el-container>
@@ -14,7 +14,12 @@
   </el-container>
 </template>
 <script>
-export default {}
+import leftaside from '../../components/home/leftaside'
+export default {
+  components: {
+    'leftaside': leftaside
+  }
+}
 </script>
 
 <style>
