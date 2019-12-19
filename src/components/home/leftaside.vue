@@ -45,7 +45,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     .leftaside{
         width: 230px;
         .el-menu{
