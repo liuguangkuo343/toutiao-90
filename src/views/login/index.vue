@@ -66,9 +66,25 @@ export default {
   methods: {
     submitLogin () {
       // 校验整个表单的规则
-      this.$refs.myForm.validate(function (isOK) {
+      this.$refs.myForm.validate((isOK) => {
         if (isOK) {
-          window.location.href = 'http://bbs.nga.cn/thread.php?fid=516&rand=650'
+          this.$axios({
+            url: '/authorizations', // 请求地址,
+            method: 'post', // 请求类型
+            data: this.loginForm // body参数
+          }).then(result => {
+            // 只接受正确结果
+            window.localStorage.setItem('user-token', result.data.data.token)
+            this.$router.push('/home')
+            // console.log(result.data.data.token)
+          }).catch(() => {
+            // 错误结果
+            this.$message({
+              type: 'warning',
+              message: '您的手机号或者验证码不正确'
+            })
+          })
+          // alert('登陆成功')
         }
       })
     }
