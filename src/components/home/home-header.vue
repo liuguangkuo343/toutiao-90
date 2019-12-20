@@ -10,13 +10,13 @@
             <el-row type="flex" justify="end">
                 <img :src="userInfo.photo ? userInfo.photo : defultImg" alt="">
                 <!-- 下拉菜单 -->
-                <el-dropdown>
+                <el-dropdown @command ="clickcommand">
                     <!-- 匿名插槽 -->
                     <span>{{userInfo.name}}</span>
                     <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>个人信息</el-dropdown-item>
-                    <el-dropdown-item>GIT地址</el-dropdown-item>
-                    <el-dropdown-item>退出</el-dropdown-item>
+                    <el-dropdown-item command="info">个人信息</el-dropdown-item>
+                    <el-dropdown-item command="url">GIT地址</el-dropdown-item>
+                    <el-dropdown-item command="logout">退出</el-dropdown-item>
                 </el-dropdown-menu>
                 </el-dropdown>
             </el-row>
@@ -45,6 +45,20 @@ export default {
     }).then(result => {
       this.userInfo = result.data.data
     })
+  },
+  methods: {
+    //   定义点击事件
+    clickcommand (command) {
+      if (command === 'info') {
+
+      } else if (command === 'url') {
+        window.location.href = ('https://github.com/liuguangkuo343/toutiao-90/commits/master')
+      } else {
+        //   退出当前主页 返回登录页面
+        window.localStorage.removeItem('user-token') // 删除用户令牌
+        this.$router.push('/login')
+      }
+    }
   }
 }
 </script>
