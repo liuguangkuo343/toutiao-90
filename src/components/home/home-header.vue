@@ -8,11 +8,11 @@
         <!-- 右边 -->
         <el-col :span="12" class="right">
             <el-row type="flex" justify="end">
-                <img src="../../assets/img/touxiang.jpg" alt="">
+                <img :src="userInfo.photo ? userInfo.photo : defultImg" alt="">
                 <!-- 下拉菜单 -->
                 <el-dropdown>
                     <!-- 匿名插槽 -->
-                    <span>North</span>
+                    <span>{{userInfo.name}}</span>
                     <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>个人信息</el-dropdown-item>
                     <el-dropdown-item>GIT地址</el-dropdown-item>
@@ -26,7 +26,26 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      userInfo: {}, // 用户对象接受数据
+      // 没图片时替代用户图片 默认图片  转换成变量 去做三元表达式判断
+      defultImg: require('../../assets/img/touxiang.jpg')
+    }
+  },
+  // 钩子函数
+  created () {
+    let token = localStorage.getItem('user-token') // 获取用户令牌
+    this.$axios({
+      url: '/user/profile',
+      headers: {
+        //   参数内容
+        Authorization: `Bearer ${token}`
+      }
+    }).then(result => {
+      this.userInfo = result.data.data
+    })
+  }
 }
 </script>
 

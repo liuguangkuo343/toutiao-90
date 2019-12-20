@@ -10,7 +10,9 @@
       <el-header style="background-color:#66FFFF">
       <homeheader>  </homeheader>
       </el-header>
-    <el-main style="background-color:#66CCFF">主要内容</el-main>
+    <el-main style="background-color:#66CCFF">
+      <router-view></router-view>
+    </el-main>
     </el-container>
 
   </el-container>
