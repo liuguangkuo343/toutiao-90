@@ -11,6 +11,7 @@
       <homeheader>  </homeheader>
       </el-header>
     <el-main style="background-color:#66CCFF">
+      <!-- 二级路由容器 -->
       <router-view></router-view>
     </el-main>
     </el-container>
