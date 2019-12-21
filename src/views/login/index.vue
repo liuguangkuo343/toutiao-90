@@ -74,7 +74,7 @@ export default {
             data: this.loginForm // body参数
           }).then(result => {
             // 只接受正确结果
-            window.localStorage.setItem('user-token', result.data.data.token)
+            window.localStorage.setItem('user-token', result.data.token)
             this.$router.push('/home')
             // console.log(result.data.data.token)
           }).catch(() => {
