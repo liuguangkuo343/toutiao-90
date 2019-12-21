@@ -78,13 +78,8 @@ export default {
             this.$router.push('/home')
             // console.log(result.data.data.token)
           }).catch(() => {
-            // 错误结果
-            // this.$message({
-            //   type: 'warning',
-            //   message: '您的手机号或者验证码不正确'
-            // })
+
           })
-          // alert('登陆成功')
         }
       })
     }

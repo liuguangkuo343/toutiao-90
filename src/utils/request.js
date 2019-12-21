@@ -5,8 +5,9 @@ import axios from 'axios'
 import router from '../router'
 import { Message } from 'element-ui'
 // 请求拦截 config 配置项
-let token = window.localStorage.getItem('user-token') // 取token
+
 axios.interceptors.request.use(function (config) {
+  let token = window.localStorage.getItem('user-token') // 获取token
   config.headers.Authorization = `Bearer ${token}` // 注入token
   return config // 返回后台操作
 }, function (params) {
@@ -25,7 +26,7 @@ axios.interceptors.response.use(function (response) {
   let message = ''
   switch (status) {
     case 400:
-      message = '请求参数错误'
+      message = '用户名或者密码不正确'
       break
     case 507:
       message = '服务器数据库异常'

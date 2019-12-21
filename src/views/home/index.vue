@@ -8,7 +8,7 @@
     <!-- 上下布局 -->
     <el-container>
       <el-header style="background-color:#66FFFF">
-      <homeheader>  </homeheader>
+      <home-header>  </home-header>
       </el-header>
     <el-main style="background-color:#66CCFF">
       <!-- 二级路由容器 -->
@@ -19,13 +19,13 @@
   </el-container>
 </template>
 <script>
-import leftaside from '../../components/home/leftaside'
-import homeheader from '../../components/home/home-header'
+// import leftaside from '../../components/home/leftaside'
+// import homeheader from '../../components/home/home-header'
 export default {
-  components: {
-    'leftaside': leftaside,
-    'homeheader': homeheader
-  }
+  // components: {
+  //   'leftaside': leftaside,
+  // 'homeheader': homeheader
+  // }
 }
 </script>
 
