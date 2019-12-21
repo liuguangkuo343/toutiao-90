@@ -1,6 +1,5 @@
-import router from '../router'
-
 // 路由拦截器
+import router from '../router'
 
 // 前置守卫
 router.beforeEach(function (to, from, next) {
@@ -8,13 +7,13 @@ router.beforeEach(function (to, from, next) {
   if (to.path.startsWith('/home')) {
     //   在这个范围查看是否存在token
     let token = window.localStorage.getItem('user-token')
-    debugger
+    // debugger
     if (token) {
       next() // 放过
     } else {
       next('/login')
     }
   } else {
-    next() // 放过
+    next() // 先放过
   }
 })
