@@ -18,7 +18,7 @@
             <template slot-scope = 'obj'>
                 <el-button size="small" type="text">修改</el-button>
             <!-- 根据状态进行判断关闭还是打开 -->
-            <el-button size="small" type="text">{{obj.row.status ? '关闭':'打开'}}评论</el-button>
+            <el-button @click="openOrstate(obj.row)" size="small" type="text">{{obj.row.status ? '关闭':'打开'}}评论</el-button>
 
             </template>
 
@@ -49,6 +49,20 @@ export default {
     // row =当前数据 column=当前列信息 cellValue=当前单元格的值 index=索引
     formatterBolen (row, column, cellValue, index) {
       return cellValue ? '正常' : '关闭'
+    },
+    openOrstate (row) {
+      let message = row.status ? '关闭' : '打开' // 获取状态
+      this.$confirm(`您是否确定${message}`).then(() => {
+        //   调用接口
+        this.$axios({
+          url: '/comments/status',
+          method: 'put',
+          params: { article_id: row.id },
+          data: { allow_comment: !row.status }
+        }).then(result => {
+          this.getComment() // 重新拉取评论管理数据
+        })
+      })
     }
   },
   created () {
