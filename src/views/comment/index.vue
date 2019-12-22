@@ -10,7 +10,7 @@
     <!-- tl-table 表格 lable表头 width宽度 prop字段名 el-table不显示布尔值-->
     <el-table :data="list">
         <el-table-column prop="title" width="650px" label="标题"></el-table-column>
-        <el-table-column :formatter="formatterBolen" prop="status" label="评论状态"></el-table-column>
+        <el-table-column :formatter="formatterBolen" prop="comment_status" label="评论状态"></el-table-column>
         <el-table-column prop="total_comment_count" label="总评论数"></el-table-column>
         <el-table-column prop="fans_comment_count" label="粉丝评论数"></el-table-column>
         <el-table-column  label="操作">
@@ -18,10 +18,8 @@
             <template slot-scope = 'obj'>
                 <el-button size="small" type="text">修改</el-button>
             <!-- 根据状态进行判断关闭还是打开 -->
-            <el-button @click="openOrstate(obj.row)" size="small" type="text">{{obj.row.status ? '关闭':'打开'}}评论</el-button>
-
+            <el-button @click="openOrstate(obj.row)" size="small" type="text">{{obj.row.comment_status ? '关闭':'打开'}}评论</el-button>
             </template>
-
         </el-table-column>
     </el-table>
   </el-card>
@@ -50,15 +48,17 @@ export default {
     formatterBolen (row, column, cellValue, index) {
       return cellValue ? '正常' : '关闭'
     },
+    // 打开或者关闭评论
     openOrstate (row) {
-      let message = row.status ? '关闭' : '打开' // 获取状态
-      this.$confirm(`您是否确定${message}`).then(() => {
+      let mess = row.comment_status ? '关闭' : '打开' // 获取状态
+      this.$confirm(`您是否确定${mess}评论吗`).then(() => {
         //   调用接口
+        console.log(row.comment_status)
         this.$axios({
           url: '/comments/status',
           method: 'put',
-          params: { article_id: row.id },
-          data: { allow_comment: !row.status }
+          params: { article_id: row.id.toString() },
+          data: { allow_comment: !row.comment_status }
         }).then(result => {
           this.getComment() // 重新拉取评论管理数据
         })

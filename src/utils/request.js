@@ -4,8 +4,8 @@
 import axios from 'axios'
 import router from '../router'
 import { Message } from 'element-ui'
+import JSONbig from 'json-bigint'
 // 请求拦截 config 配置项
-
 axios.interceptors.request.use(function (config) {
   let token = window.localStorage.getItem('user-token') // 获取token
   config.headers.Authorization = `Bearer ${token}` // 注入token
@@ -14,8 +14,11 @@ axios.interceptors.request.use(function (config) {
 
 })
 
+axios.defaults.transformResponse = [function (data) {
+  // 将jsonbig进行使用 转化代码
+  return JSONbig.parse(data)
+}]
 // 响应拦截器
-
 axios.interceptors.response.use(function (response) {
 //   成功执行函数  统一处理状态码
 
@@ -42,6 +45,7 @@ axios.interceptors.response.use(function (response) {
     default:
       break
   }
-  Message({ type: 'warning', message })
+  Message({ type: 'warning', message }) // 提示信息
+  return Promise.reject(error) // 如果不做任何操作会进入promise reject就会进入catch接受错误数据
 })
 export default axios
