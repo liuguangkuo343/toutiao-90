@@ -1,6 +1,6 @@
 <template>
   <!-- 卡片组件 评论管理-->
-  <el-card>
+  <el-card v-loading = "loading">
     <bread-crumb slot="header">
       <!-- 插槽内容 -->
       <template slot="title">评论管理</template>
@@ -40,6 +40,7 @@
 export default {
   data () {
     return {
+      loading: false,
       list: [], // 接受返回结果
       page: {
         // 创建对象 存放分页信息各种数据
@@ -56,12 +57,15 @@ export default {
       this.getComment()
     },
     getComment () {
+      this.loading = true
       this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pagesize }
       }).then(result => {
         this.list = result.data.results
         this.page.total = result.data.total_count // 总条数
+        // setTimeout(() => { this.loading = false }, 2)
+        this.loading = false
       })
     },
     // 定义格式化函数
