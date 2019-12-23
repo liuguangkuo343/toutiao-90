@@ -7,7 +7,7 @@
       </template>
       </bread-crumb>
       <!-- 标签页 label:标题 name="all"-->
-      <el-tabs v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="changeTab">
           <el-tab-pane label="全部图片" name="all">
               <!-- 生成页面结构 -->
               <div class="img-list">
@@ -43,6 +43,10 @@ export default {
     }
   },
   methods: {
+    //   切换页签
+    changeTab () {
+      this.getMaterial() // 切换全部和收藏 利用collect: this.activeName === 'collect'
+    },
     getMaterial () {
       this.$axios({
         url: '/user/images',
