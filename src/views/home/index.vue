@@ -2,11 +2,11 @@
   <!-- 整体的容器 -->
   <el-container>
     <!-- 左右布局 -->
-    <el-aside style="height:110vh;background-color: #323745; width:230px;">
+    <el-aside style="background-color: #323745; width:230px;">
         <leftaside></leftaside>
     </el-aside>
     <!-- 上下布局 -->
-    <el-container style="height:110vh;">
+    <el-container>
       <el-header  style="background-color:#66FFFF">
       <home-header>  </home-header>
       </el-header>

@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card class="articles">
       <bread-crumb slot="header">
         <template slot="title">文章列表</template>
       </bread-crumb>
@@ -30,6 +30,27 @@
               </el-date-picker>
           </el-form-item>
       </el-form>
+
+      <!-- 内容区域 -->
+      <el-row class="total">
+        <span>共找到6000符合条件的内容</span>
+      </el-row>
+      <div class="articles-item" v-for="item in 100" :key="item">
+        <!-- 左侧 -->
+        <div class="left">
+          <img src="../../assets/img/touxiang.jpg" alt="">
+          <div class="info">
+            <span>啊哈哈哈哈哈</span>
+            <el-tag style="text-align:center;witch:60px">标签一</el-tag>
+            <span style="color:#999;font-size:12px">2019</span>
+          </div>
+        </div>
+        <!-- 右侧 -->
+        <div class="right">
+          <span><i class="el-icon-edit">修改</i></span>
+          <span><i class="el-icon-delete">删除</i></span>
+        </div>
+      </div>
   </el-card>
 </template>
 
@@ -62,6 +83,39 @@ export default {
 
 </script>
 
-<style>
-
+<style lang="less" scoped>
+        .articles{
+          .total{
+            height: 60px;
+            border-bottom: 1px dashed #ccc
+          }
+          .articles-item{
+            display: flex; //左右布局
+            justify-content:space-between;  //两头对齐
+            padding: 20px 0px;
+            border-bottom: 1px solid #f2f3f5;
+            .left{
+              display: flex;
+              .info{
+                height: 100px;
+                justify-content:space-around;
+                margin-left: 10px;
+                display: flex;
+                flex-direction: column
+              }
+              img{
+                width: 180px;
+                height: 100px;
+                border-radius: 5px
+              }
+            }
+            .right{
+              span{
+                font-size: 14px;
+              margin-right: 8px
+              }
+              ;
+            }
+          }
+        }
 </style>
