@@ -16,7 +16,7 @@ axios.interceptors.request.use(function (config) {
 
 axios.defaults.transformResponse = [function (data) {
   // 将jsonbig进行使用 转化代码
-  return JSONbig.parse(data)
+  return data ? JSONbig.parse(data) : {}
 }]
 // 响应拦截器
 axios.interceptors.response.use(function (response) {

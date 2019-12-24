@@ -13,8 +13,9 @@
           <el-card class="card-img" v-for="item in list" :key="item.id">
             <img :src="item.url" alt />
             <el-row class="tubiao" type="flex" align="middle" justify="space-around">
-              <i class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+                <!-- //根据当前状态来决定 是否给文字调价颜色  区分状态-->
+              <i @click="addordel(item)" :style="{color: item.is_collected ? 'pink':'#000'}" class="el-icon-star-on"></i>
+              <i @click="delimg(item.id)"  class="el-icon-delete-solid"></i>
             </el-row>
           </el-card>
         </div>
@@ -53,9 +54,34 @@ export default {
         pagesize: 10,
         total: 0
       }
+      //   console.log();
+
     }
   },
   methods: {
+    // 删除图片
+    delimg (id) {
+      this.$confirm('您确定要删除图片吗').then(() => {
+        this.$axios({
+          method: 'delete',
+          url: `/user/images/${id}`
+        }).then(() => {
+          this.getMaterial()
+        })
+      })
+    },
+    // 取消或者收藏
+    addordel (item) {
+      this.$axios({
+        method: 'put',
+        url: `/user/images/${item.id}`,
+        data: {
+          collect: !item.is_collected // 取反 收藏就要取消
+        }
+      }).then(result => {
+        this.getMaterial()
+      })
+    },
     //   改编页码方法
     changepage (newPage) {
       this.page.currentPage = newPage // 新页码拉取
@@ -112,6 +138,9 @@ export default {
       height: 30px;
       // line-height: 36px;
       background-color: cadetblue;
+    }
+    i{
+    cursor: pointer
     }
   }
 }
