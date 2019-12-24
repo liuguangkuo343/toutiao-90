@@ -35,14 +35,17 @@
       <el-row class="total">
         <span>共找到6000符合条件的内容</span>
       </el-row>
-      <div class="articles-item" v-for="item in 100" :key="item">
+      <div class="articles-item" v-for="item in list" :key="item.id.toString()">
         <!-- 左侧 -->
         <div class="left">
-          <img src="../../assets/img/touxiang.jpg" alt="">
+
+          <!-- 获取图片数据 -->
+          <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt="">
           <div class="info">
-            <span>啊哈哈哈哈哈</span>
-            <el-tag style="text-align:center;witch:60px">标签一</el-tag>
-            <span style="color:#999;font-size:12px">2019</span>
+            <span>{{item.title}}}</span>
+            <!-- 用v-bind绑定 进行判断状态 -->
+            <el-tag :type="item.status |filterType" style="text-align:center;witch:40px;">{{item.status | filterStatus}}</el-tag>
+            <span style="color:#999;font-size:12px">{{item.pubdate}}}</span>
           </div>
         </div>
         <!-- 右侧 -->
@@ -63,7 +66,42 @@ export default {
         channel_id: null, // 绑定显示
         dateRange: [] // 日期范围
       },
-      channels: [] // 接受频道数据
+      channels: [], // 接受频道数据
+      list: [],
+      defaultImg: require('../../assets/img/touxiang.jpg')
+    }
+  },
+  filters: {
+    // 过滤器名称
+    filterStatus (value) {
+      // value第一个参数  当前状态进行判断
+      switch (value) {
+        case 0:
+          return '草稿'
+        case 1:
+          return '待审核'
+        case 2:
+          return '已发表'
+        case 3:
+          return '审核失败'
+        default:
+          break
+      }
+    },
+    filterType (value) {
+      // value第一个参数  当前状态进行判断
+      switch (value) {
+        case 0:
+          return 'warning'
+        case 1:
+          return 'info'
+        case 2:
+          return ''
+        case 3:
+          return 'danger'
+        default:
+          break
+      }
     }
   },
   methods: {
@@ -74,10 +112,19 @@ export default {
       }).then(result => {
         this.channels = result.data.channels
       })
+    },
+    // 获取文章列表数据
+    getArticles () {
+      this.$axios({
+        url: '/articles'
+      }).then(result => {
+        this.list = result.data.results
+      })
     }
   },
   created () {
     this.getChannels() // 获取文章数据
+    this.getArticles() // 获取文章列表数据
   }
 }
 
