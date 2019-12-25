@@ -31,7 +31,7 @@
 
     <!-- 内容区域 -->
     <el-row class="total">
-      <span>共找到6000符合条件的内容</span>
+      <span>共找到{{page.total}}符合条件的内容</span>
     </el-row>
     <div class="articles-item" v-for="item in list" :key="item.id.toString()">
       <!-- 左侧 -->
@@ -45,6 +45,7 @@
             :type="item.status |filterType"
             style="text-align:center;witch:40px;"
           >{{item.status | filterStatus}}</el-tag>
+              <!-- 注册删除按钮时间 -->
           <span style="color:#999;font-size:12px">{{item.pubdate}}}</span>
         </div>
       </div>
@@ -53,11 +54,22 @@
         <span>
           <i class="el-icon-edit">修改</i>
         </span>
-        <span>
+        <span  @click="delMaterial(item.id)">
           <i class="el-icon-delete">删除</i>
         </span>
       </div>
     </div>
+    <!-- 分页组件 -->
+    <el-row type="flex" justify="center" align="middle" style="height:60px">
+      <el-pagination background layout="prev,pager,next"
+        :total="page.total"
+        :current-page="page.currentpage"
+        :page-size="page.paageSize"
+        @current-change="changePage"
+      >
+
+      </el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -72,7 +84,12 @@ export default {
       },
       channels: [], // 接受频道数据
       list: [],
-      defaultImg: require('../../assets/img/touxiang.jpg')
+      defaultImg: require('../../assets/img/touxiang.jpg'),
+      page: {
+        currentPage: 1,
+        pageSize: 10,
+        total: 0
+      }
     }
   },
   watch: {
@@ -117,6 +134,37 @@ export default {
     }
   },
   methods: {
+    // 改编页码
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      let params = {
+        page: this.page.currentPage, // 当前页码
+        per_page: this.page.pageSize, // 每页数量
+        status: this.searchForm.status === 5 ? null : this.searchForm.status, // 因为5是前端定义的一个标识, 如果等于5 表示查全部, 全部应该什么都不传 直接传null
+        channel_id: this.searchForm.channel_id,
+        begin_pubdate: this.searchForm.dateRange.length ? this.searchForm.dateRange[0] : null, // 开始时间
+        end_pubdate: this.searchForm.dateRange.length > 1 ? this.searchForm.dateRange[1] : null // 截止时间
+      }
+      this.getArticles(params)
+    },
+    // 删除文章
+    delMaterial (id) {
+      this.$confirm('您确定要删除此文章吗').then(() => {
+        // 调用删除接口
+        this.$axios({
+          method: 'delete',
+          url: `/articles/${id.toString()}`
+        }).then(result => {
+          // 提示
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
+          // 重新拉取数据
+          this.getArticles()
+        })
+      })
+    },
     // 改变条件
     changeCondition () {
       // alert(this.searchForm.status)
@@ -143,13 +191,14 @@ export default {
         url: '/articles',
         params
       }).then(result => {
-        this.list = result.data.results
+        this.list = result.data.results // 获取文章列表数据
+        this.page.total = result.data.total_count // 分页总数
       })
     }
   },
   created () {
     this.getChannels() // 获取文章数据
-    this.getArticles() // 获取文章列表数据
+    this.getArticles({ pahe: 1, page_page: 10 }) // 获取文章列表数据
   }
 }
 </script>
@@ -184,6 +233,7 @@ export default {
       span {
         font-size: 14px;
         margin-right: 8px;
+        cursor: pointer;
       }
     }
   }
