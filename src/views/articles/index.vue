@@ -39,19 +39,19 @@
         <!-- 获取图片数据 -->
         <img :src="item.cover.images.length ? item.cover.images[0] : defaultImg" alt />
         <div class="info">
-          <span>{{item.title}}}</span>
+          <span>{{item.title}}</span>
           <!-- 用v-bind绑定 进行判断状态 -->
           <el-tag
             :type="item.status |filterType"
             style="text-align:center;witch:40px;"
           >{{item.status | filterStatus}}</el-tag>
               <!-- 注册删除按钮时间 -->
-          <span style="color:#999;font-size:12px">{{item.pubdate}}}</span>
+          <span style="color:#999;font-size:12px">{{item.pubdate}}</span>
         </div>
       </div>
       <!-- 右侧 -->
       <div class="right">
-        <span>
+        <span @click="toModify(item.id)">
           <i class="el-icon-edit">修改</i>
         </span>
         <span  @click="delMaterial(item.id)">
@@ -134,6 +134,10 @@ export default {
     }
   },
   methods: {
+    // 修改文章跳转
+    toModify (id) {
+      this.$router.push(`/home/publish/${id.toString()}`)
+    },
     // 改编页码
     changePage (newPage) {
       this.page.currentPage = newPage

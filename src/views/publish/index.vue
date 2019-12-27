@@ -63,6 +63,24 @@ export default {
       }
     }
   },
+  watch: {
+    $route: function (to, from) {
+      if (to.params.articleId) {
+        // 如果有id是修改 如果没有是发布
+      } else {
+        // 发布
+        this.formData = {
+          title: '', // 文章标题
+          content: '', // 文章内容
+          cover: {
+            type: 0, // -1 自动 0 无图  1-1张 3-3张
+            images: [] // 放置封面地址的数组
+          },
+          channel_id: null // 频道id
+        }
+      }
+    }
+  },
   methods: {
     // 获取所有频道
     getChannels () {
@@ -92,10 +110,20 @@ export default {
           })
         }
       })
+    },
+    // 通过id查询文章数据
+    getArticleById (articleId) {
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data // 数据复制给forData
+      })
     }
   },
   created () {
     this.getChannels()
+    let { articleId } = this.$route.params
+    articleId && this.getArticleById(articleId) // 如果id存在查询文章的数据
   }
 }
 </script>
