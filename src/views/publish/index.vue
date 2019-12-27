@@ -12,14 +12,15 @@
             <quill-editor v-model="formData.content" style="height:250px; margin-bottom:40px" margin-bottom:40px ></quill-editor>
         </el-form-item>
         <el-form-item  prop="cover" label="封面">
-          <el-radio-group v-model="formData.cover.type">
+          <el-radio-group @change="changeType" v-model="formData.cover.type">
             <el-radio :label="1">单图</el-radio>
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
-
           </el-radio-group>
         </el-form-item>
+        <!-- 封面组件 -->
+        <cover-image :list="formData.cover.images"></cover-image>
         <el-form-item  prop="channel_id" label="频道">
           <el-select v-model="formData.channel_id">
             <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name">
@@ -81,8 +82,21 @@ export default {
           channel_id: null // 频道id
         }
       }
-    },
-    'formData.cover.type': function () {
+    }
+    // 监听封面类型的改变
+    //   'formData.cover.type': function () {
+    //     // 根据images的长度 来渲染下面图片
+    //     if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+    //       this.formData.cover.images = [] // 无图或者自动
+    //     } else if (this.formData.cover.type === 1) {
+    //       this.formData.cover.images = [''] // 一张图
+    //     } else if (this.formData.cover.type === 3) {
+    //       this.formData.cover.images = ['', '', ''] // 三张图
+    //     }
+    //   }
+  },
+  methods: {
+    changeType () {
       // 根据images的长度 来渲染下面图片
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
         this.formData.cover.images = [] // 无图或者自动
@@ -91,9 +105,8 @@ export default {
       } else if (this.formData.cover.type === 3) {
         this.formData.cover.images = ['', '', ''] // 三张图
       }
-    }
-  },
-  methods: {
+    },
+
     // 获取所有频道
     getChannels () {
       this.$axios({
@@ -102,12 +115,11 @@ export default {
         this.channels = result.data.channels
       })
     },
-    // 发布文章
     publishArticle (draft) {
-      this.$refs.publishForm.validate(idOk => {
-        if (idOk) {
-          // 判断是修改还是发布
-          let{ articleId } = this.$route.params // 获取动态路由参数
+      this.$refs.publishForm.validate(isOK => {
+        if (isOK) {
+          // 判断是修改还是发布文章
+          let { articleId } = this.$route.params // 获取动态路由参数
           this.$axios({
             url: articleId ? `/articles/${articleId}` : '/articles',
             method: articleId ? 'put' : 'post',
@@ -118,7 +130,7 @@ export default {
               type: 'success',
               message: '保存成功'
             })
-            // 跳转文章列表页
+            // 跳转到文章列表页
             this.$router.push('/home/articles')
           })
           // if (articleId) {
@@ -132,11 +144,11 @@ export default {
           //       type: 'success',
           //       message: '保存成功'
           //     })
-          //     // 跳转文章列表页
+          //     // 跳转到文章列表页
           //     this.$router.push('/home/articles')
           //   })
           // } else {
-          //   // 发布接口
+          //   // 调用发布接口
           //   this.$axios({
           //     url: '/articles',
           //     method: 'post',
@@ -147,7 +159,7 @@ export default {
           //       type: 'success',
           //       message: '保存成功'
           //     })
-          //     // 跳转文章列表页
+          //     // 跳转到文章列表页
           //     this.$router.push('/home/articles')
           //   })
           // }
@@ -165,6 +177,7 @@ export default {
       })
     }
   },
+
   created () {
     this.getChannels()
     let { articleId } = this.$route.params
