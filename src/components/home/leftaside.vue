@@ -32,7 +32,7 @@
              <el-menu-item index="/home/fanlist">粉丝列表</el-menu-item>
             </el-submenu>
 
-            <el-menu-item index="/home/userInfo">
+            <el-menu-item index="/home/account">
                 账户信息
             </el-menu-item>
         </el-menu>

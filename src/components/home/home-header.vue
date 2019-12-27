@@ -14,7 +14,7 @@
                     <!-- 匿名插槽 -->
                     <span>{{userInfo.name}}</span>
                     <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="info">个人信息</el-dropdown-item>
+                    <el-dropdown-item command="info">账户信息</el-dropdown-item>
                     <el-dropdown-item command="url">GIT地址</el-dropdown-item>
                     <el-dropdown-item command="logout">退出</el-dropdown-item>
                 </el-dropdown-menu>
@@ -46,7 +46,7 @@ export default {
     //   定义点击事件
     clickcommand (command) {
       if (command === 'info') {
-
+        this.$router.push('/home/account') // 去到账户信息
       } else if (command === 'url') {
         window.location.href = ('https://github.com/liuguangkuo343/toutiao-90/commits/master')
       } else {
