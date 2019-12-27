@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
       <bread-crumb slot="header">
         <template slot="title">发布文章</template>
       </bread-crumb>
@@ -17,6 +17,7 @@
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
+
           </el-radio-group>
         </el-form-item>
         <el-form-item  prop="channel_id" label="频道">
@@ -38,6 +39,7 @@
 export default {
   data () {
     return {
+      loading: false,
       channels: [], // 接受所有频道数据
       formData: {
         title: '', // 文章标题
@@ -78,6 +80,16 @@ export default {
           },
           channel_id: null // 频道id
         }
+      }
+    },
+    'formData.cover.type': function () {
+      // 根据images的长度 来渲染下面图片
+      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+        this.formData.cover.images = [] // 无图或者自动
+      } else if (this.formData.cover.type === 1) {
+        this.formData.cover.images = [''] // 一张图
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', ''] // 三张图
       }
     }
   },
@@ -144,9 +156,11 @@ export default {
     },
     // 通过id查询文章数据
     getArticleById (articleId) {
+      this.loading = true
       this.$axios({
         url: `/articles/${articleId}`
       }).then(result => {
+        this.loading = false
         this.formData = result.data // 数据复制给forData
       })
     }
