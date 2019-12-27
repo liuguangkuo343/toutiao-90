@@ -1,5 +1,5 @@
 <template>
-    <div class="leftaside">
+    <div  class="leftaside">
         <div class="title">
             <img src="../../assets/img/logo_admin.png" alt="">
         </div>
@@ -48,6 +48,7 @@ export default {
 <style lang="less" scoped>
     .leftaside{
         width: 230px;
+        height: 100vh;
         .el-menu{
             border-right: none
         }

@@ -64,6 +64,7 @@ export default {
         height: 60px;
         line-height: 60px;
         .left{
+          // height: 200px;
             font-size: 20px;
             span{
                 color: #2c3e50;
