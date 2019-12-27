@@ -20,7 +20,7 @@
           </el-radio-group>
         </el-form-item>
         <!-- 封面组件 -->
-        <cover-image :list="formData.cover.images"></cover-image>
+        <cover-image @selectTwoImg="receiveImg" :list="formData.cover.images"></cover-image>
         <el-form-item  prop="channel_id" label="频道">
           <el-select v-model="formData.channel_id">
             <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name">
@@ -96,6 +96,19 @@ export default {
     //   }
   },
   methods: {
+    // 接受子组件数据    拿到索引还要拿到下标
+    receiveImg (url, index) {
+      // 拿到URL地址  要改的是一个数组
+      // this.formData.cover.images[index] = url  错误写法 不是响应式的
+      this.formData.cover.images = this.formData.cover.images.map(function (item, i) {
+        if (index === i) {
+          // 说明找到了要替换的地址
+          return url
+        }
+        // 如果没找到 直接返回原来的数据
+        return item
+      })
+    },
     changeType () {
       // 根据images的长度 来渲染下面图片
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
