@@ -10,8 +10,8 @@
         <!-- 生成页面结构 -->
         <div class="img-list">
           <!-- v-for对数据进行遍历 -->
-          <el-card class="card-img" v-for="item in list" :key="item.id">
-            <img :src="item.url" alt />
+          <el-card class="card-img" v-for="(item,index) in list" :key="item.id">
+            <img  @click="openDialog(index)"  :src="item.url" alt />
             <el-row class="tubiao" type="flex" align="middle" justify="space-around">
                 <!-- //根据当前状态来决定 是否给文字调价颜色  区分状态-->
               <i @click="addordel(item)" :style="{color: item.is_collected ? 'pink':'#000'}" class="el-icon-star-on"></i>
@@ -25,7 +25,7 @@
         <div class="img-list">
           <!-- v-for对数据进行遍历 -->
           <el-card class="card-img" v-for="item in list" :key="item.id">
-            <img :src="item.url" alt />
+            <img:src="item.url" alt />
           </el-card>
         </div>
       </el-tab-pane>
@@ -40,6 +40,14 @@
         @current-change="changepage"
       ></el-pagination>
     </el-row>
+    <!-- 放入弹层组件 -->
+    <el-dialog @opened="openEnd" :visible="dialogVisible" @close="dialogVisible=false">
+      <el-carousel ref="myCarosel" indicator-position='outside' height="500px">
+          <el-carousel-item  v-for = "(item,index) in list" :key="index">
+            <img :src="item.url" alt="" style="width:100%;hegit:100%">
+          </el-carousel-item>
+      </el-carousel>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -47,18 +55,29 @@
 export default {
   data () {
     return {
+      dialogVisible: false, // 弹层显示隐藏
       activeName: 'all', // 当前选中谁
-      list: [], // 接受全部数据
+      list: [], // 接受全部数据 素材
       page: {
         currentPage: 1,
         pagesize: 10,
         total: 0
-      }
+      },
       //   console.log();
-
+      clickIndex: -1 // 点击的index
     }
   },
   methods: {
+    openEnd () {
+      // alert(123)
+      this.$refs.myCarosel.setActiveItem(this.clickIndex)
+    },
+    // 点击图片打开弹层
+    openDialog (index) {
+      this.dialogVisible = true // dialog是懒加载 第一个没有弹出之前是没有这个组件元素的
+      // alert(1)
+      this.clickIndex = index
+    },
     // 删除图片
     delimg (id) {
       this.$confirm('您确定要删除图片吗').then(() => {
@@ -106,6 +125,7 @@ export default {
       }).then(result => {
         this.list = result.data.results // 获取图片数据 有可能是 全部 也由可能是收藏
         this.page.total = result.data.total_count // 总条数
+        // this.dialogVisible = false
       })
     }
   },
