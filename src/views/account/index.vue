@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -64,8 +65,10 @@ export default {
       }).then(result => {
         this.loading = false // 关闭弹层
         this.formData.photo = result.data.photo // 给当前的头像赋值
+        eventBus.$emit('updateUserinFo')
       })
     },
+    // 获取用户信息Q
     getUserInfo () {
       this.$axios({
         url: '/user/profile'
@@ -85,6 +88,8 @@ export default {
             type: 'success',
             message: '保存用户信息成功'
           })
+          // 认为保存成功 通知header 组件 让它更新信息
+          //   console.log(222)
         })
       })
     }

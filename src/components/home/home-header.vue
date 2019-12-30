@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -35,14 +36,28 @@ export default {
   },
   // 钩子函数
   created () {
-    // let token = localStorage.getItem('user-token') // 获取用户令牌
     this.$axios({
       url: '/user/profile'
     }).then(result => {
       this.userInfo = result.data
     })
+
+    // 同步更新  开启监听
+    eventBus.$on('updateUserinFo', () => {
+      // 认为别人更新了 自己也应该更新
+      // let token = localStorage.getItem('user-token') // 获取用户令牌
+      this.$axios({
+        url: '/user/profile'
+      }).then(result => {
+        this.userInfo = result.data
+        console.log(this.userInfo)
+      })
+    })
   },
   methods: {
+    // getUserInfo () {
+
+    // },
     //   定义点击事件
     clickcommand (command) {
       if (command === 'info') {
