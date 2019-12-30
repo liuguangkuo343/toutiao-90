@@ -36,6 +36,9 @@ const routes = [
     {
       path: 'account', // 修改文章
       component: () => import('../views/account')
+    }, {
+      path: 'picture', // 修改文章
+      component: () => import('../views/picture')
     } ]
   }, {
     path: '/login',
