@@ -10,6 +10,10 @@ const routes = [
     redirect: '/login'
   },
   {
+    path: '*',
+    component: () => import('../views/404')
+  },
+  {
     path: '/home',
     name: 'home',
     component: Home,
